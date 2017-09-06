@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CubeController : MonoBehaviour {
+public class CubeController : MonoBehaviour
+{
 
     // キューブの移動速度
     private float speed = -0.2f;
@@ -10,13 +11,18 @@ public class CubeController : MonoBehaviour {
     // 消滅位置
     private float deadLine = -10;
 
+    private AudioSource sound ;
+
     // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    void Start()
+    {
+        // ブロックの衝突音
+        sound = GetComponent<AudioSource>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         // キューブを移動させる
         transform.Translate(this.speed, 0, 0);
 
@@ -24,6 +30,15 @@ public class CubeController : MonoBehaviour {
         if (transform.position.x < this.deadLine)
         {
             Destroy(gameObject);
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D coll)
+    {
+        // 衝突相手が、ブロックまたは地面の場合、音を発生させる
+        if ( (coll.gameObject.tag == "BLOCK") || ( coll.gameObject.tag == "GROUND") )
+        {
+            sound.Play();
         }
     }
 }
